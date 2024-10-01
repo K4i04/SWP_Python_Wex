@@ -1,24 +1,24 @@
 import random
 
 
-def lottoziehung():
-    return random.sample(range(1, 46), 6)
+def lottoziehen():
+    meine_liste = []
+    while len(meine_liste) < 6:
+        zahl = random.randint(1, 45)
+        if zahl not in meine_liste:
+            meine_liste.append(zahl)
+    return meine_liste
 
 
-def lottoziehung_statistik(anzahl_ziehungen):
-    statistik = {i: 0 for i in range(1, 46)}
-
-    for _ in range(anzahl_ziehungen):
-        gezogene_zahlen = lottoziehung()
-        for zahl in gezogene_zahlen:
-            statistik[zahl] += 1
-
-    return statistik
+def zahlenZuordnen(lotto, ergebnis):
+    for zahl in lotto:
+        ergebnis[zahl] += 1
+    return ergebnis
 
 
 if __name__ == "__main__":
-    statistik = lottoziehung_statistik(1000)
-
-    print(f"Statistik der Lottoziehungen ({1000} Ziehungen):")
-    for zahl, anzahl in sorted(statistik.items()):
-        print(f"Zahl {zahl}: {anzahl} Mal gezogen")
+    ergebnis = {i: 0 for i in range(1, 46)}
+    print(lottoziehen())
+    for _ in range(1000):
+        ergebnis = zahlenZuordnen(lottoziehen(), ergebnis)
+    print(ergebnis)
