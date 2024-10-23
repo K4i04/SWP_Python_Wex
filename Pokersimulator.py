@@ -153,39 +153,50 @@ def isRoyalFlush(hand):
     # Überprüfe, ob alle Royal Flush Werte in der Hand sind
     return royal_values.issubset(values_in_hand)
 
-    # Hauptprogramm
 
+def calculate_percentage(total_hands, combination_count):
+    return (combination_count / total_hands) * 100
 
-for i in range(10):
+total_games = 100000
+royal_flush_count = 0
+straight_flush_count = 0
+full_house_count = 0
+flush_count = 0
+straight_count = 0
+pair_count = 0
+four_of_a_kind_count = 0
+three_of_a_kind_count = 0
+
+for _ in range(total_games):
     hand = getHand()  # Ziehe eine Hand
 
-    # Überprüfe die Pokerhände und gib nur einzigartige Hände aus
+    # Zähle die verschiedenen Kombinationen
     if isRoyalFlush(hand):
-        print("Ja, du hast einen Royal Flush.")
-        print(hand)
+        royal_flush_count += 1
     elif isStraightFlush(hand):
-        print("Ja, du hast einen Straight Flush.")
-        print(hand)
+        straight_flush_count += 1
     elif isFullHouse(hand):
-        print("Ja, du hast ein Full House.")
-        print(hand)
+        full_house_count += 1
     elif isFlush(hand):
-        print("FLUSHHHH!!!")
-        print(hand)
+        flush_count += 1
     elif strasse(hand):
-        print("Du HAST EINE STRASSE!!!")
-        print(hand)
+        straight_count += 1
     elif hasPair(hand) == 2:
-        print("Ja, du hast zwei Paare in deiner Hand.")
-        print(hand)
+        pair_count += 2
     elif hasPair(hand) == 1:
-        print("Ja, du hast ein Paar in deiner Hand.")
-        print(hand)
+        pair_count += 1
     elif vierling(hand):
-        print("Ja, du hast ein 4a Paar in deiner Hand.")
-        print(hand)
+        four_of_a_kind_count += 1
     elif drilling(hand):
-        print("Ja, du hast ein 3a Paar in deiner Hand.")
-        print(hand)
-    else:
-        print("Nein, du hast kein Paar in deiner Hand.")
+        three_of_a_kind_count += 1
+
+
+print(f"Royal Flush: {calculate_percentage(total_games, royal_flush_count):.4f}%")
+print(f"Straight Flush: {calculate_percentage(total_games, straight_flush_count):.4f}%")
+print(f"Full House: {calculate_percentage(total_games, full_house_count):.4f}%")
+print(f"Flush: {calculate_percentage(total_games, flush_count):.4f}%")
+print(f"Straight: {calculate_percentage(total_games, straight_count):.4f}%")
+print(f"Pairs: {calculate_percentage(total_games, pair_count):.4f}%")
+print(f"Four of a Kind: {calculate_percentage(total_games, four_of_a_kind_count):.4f}%")
+print(f"Three of a Kind: {calculate_percentage(total_games, three_of_a_kind_count):.4f}%")
+
