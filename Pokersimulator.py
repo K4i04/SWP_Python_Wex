@@ -1,7 +1,20 @@
 import random
+import time
+
+
+def zeitmesser(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} dauerte {end_time - start_time:.6f} Sekunden")
+        return result
+
+    return wrapper
 
 
 # Erstellt ein komplettes Kartendeck mit allen Kombinationen aus Werten und Farben
+@zeitmesser
 def get_deck():
     values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     suits = ['Herz', 'Karo', 'Pik', 'Kreuz']
@@ -9,17 +22,20 @@ def get_deck():
 
 
 # Zieht eine Hand von `size` Karten aus einem gemischten Deck
+@zeitmesser
 def get_hand(deck, size=5):
     random.shuffle(deck)  # Mische das Deck zufällig
     return deck[:size]  # Ziehe die obersten `size` Karten
 
 
 # Berechnet den Prozentsatz einer Kombination
+@zeitmesser
 def calculate_percentage(total_hands, combination_count):
     return round((combination_count / total_hands) * 100, 2)  # Runden auf 2 Nachkommastellen
 
 
 # Zählt die Häufigkeit jedes Kartenwerts in der Hand
+@zeitmesser
 def count_card_values(hand):
     value_count = {}
     for card in hand:
@@ -29,21 +45,25 @@ def count_card_values(hand):
 
 
 # Prüft, ob die Hand einen Drilling (3 gleiche Werte) enthält
+@zeitmesser
 def has_drilling(value_count):
     return 3 in value_count.values()  # Prüft, ob eine Zahl in den Häufigkeiten 3 ist
 
 
 # Prüft, ob die Hand einen Vierling (4 gleiche Werte) enthält
+@zeitmesser
 def has_vierling(value_count):
     return 4 in value_count.values()  # Prüft, ob eine Zahl in den Häufigkeiten 4 ist
 
 
 # Prüft, wie viele Paare (2 gleiche Werte) in der Hand vorhanden sind
+@zeitmesser
 def has_pair(value_count):
     return list(value_count.values()).count(2)  # Zählt, wie oft der Wert 2 in den Häufigkeiten vorkommt
 
 
 # Prüft, ob die Hand eine Straße (5 aufeinanderfolgende Werte) enthält
+@zeitmesser
 def has_strasse(hand):
     value_order = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     values = sorted([card.split()[0] for card in hand], key=value_order.index)  # Sortiere die Werte
@@ -53,22 +73,26 @@ def has_strasse(hand):
 
 
 # Prüft, ob die Hand einen Flush (alle Karten in einer Farbe) enthält
+@zeitmesser
 def has_flush(hand):
     suits = [card.split()[1] for card in hand]  # Extrahiere die Farben der Karten
     return len(set(suits)) == 1  # Prüft, ob alle Farben gleich sind (nur 1 Farbe im Set)
 
 
 # Prüft, ob die Hand ein Full House (3 gleiche Werte + 2 gleiche Werte) enthält
+@zeitmesser
 def has_full_house(value_count):
     return 3 in value_count.values() and 2 in value_count.values()  # Es muss genau einen Drilling und ein Paar geben
 
 
 # Prüft, ob die Hand ein Straight Flush (Straße + gleiche Farbe) enthält
+@zeitmesser
 def has_straight_flush(hand):
     return has_flush(hand) and has_strasse(hand)  # Kombination aus Flush und Straße
 
 
 # Prüft, ob die Hand ein Royal Flush (Straight Flush von 10 bis A) enthält
+@zeitmesser
 def has_royal_flush(hand):
     royal_values = {'10', 'J', 'Q', 'K', 'A'}
     values = {card.split()[0] for card in hand}  # Speichere die Werte in einem Set
@@ -76,6 +100,7 @@ def has_royal_flush(hand):
 
 
 # Führt eine Simulation von `total_games` durch, um die Häufigkeit von Pokerkombinationen zu ermitteln
+@zeitmesser
 def simulate_games(total_games):
     deck = get_deck()  # Erstelle ein neues Deck
     results = {
@@ -117,6 +142,7 @@ def simulate_games(total_games):
 
 
 # Hauptfunktion, um das Programm auszuführen
+@zeitmesser
 def main():
     zahl = 1234567.891
     print(f"{zahl:,.2f}")  # Ausgabe: 1,234,567.89
@@ -124,9 +150,8 @@ def main():
     total_games = int(input("Wie viele Spiele möchten Sie simulieren? "))  # Frage die Anzahl der Spiele ab
     results = simulate_games(total_games)  # Führe die Simulation durch
 
-    # Gib die Ergebnisse mit Prozentwerten aus
     print(f"Royal Flush: {calculate_percentage(total_games, results['royal_flush'])}%")
-    print(f"Straight Flush: {calculate_percentage(total_games, results ['straight_flush'])}%")
+    print(f"Straight Flush: {calculate_percentage(total_games, results['straight_flush'])}%")
     print(f"Full House: {calculate_percentage(total_games, results['full_house'])}%")
     print(f"Flush: {calculate_percentage(total_games, results['flush'])}%")
     print(f"Straight: {calculate_percentage(total_games, results['straight'])}%")
@@ -141,7 +166,7 @@ def test_calculate_percentage():
     assert calculate_percentage(1000, 250) == 25.0
 
 
-
 if __name__ == "__main__":
     #main()  # Startet das Programm, wenn die Datei direkt ausgeführt wird
-    test_calculate_percentage()
+    #test_calculate_percentage()
+    print(main())
